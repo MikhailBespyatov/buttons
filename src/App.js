@@ -1,53 +1,31 @@
-import "./styles.css";
-import { useState } from "react";
-import { Button } from "@material-ui/core";
+import { Component } from "react";
+import ChangeButtons from "./components/change-buttons";
+import MainButton from "./components/main-button";
 
-export default function App() {
-  const [value, setValue] = useState(1);
-  const [change, setChange] = useState(false);
-
-  const onMainButton = evt => {
-    evt.preventDefault();
-    setChange(true);
+export default class App extends Component {
+  state = {
+    value: 1,
+    change: false
   };
 
-  const onChangeButtons = evt => {
-    evt.preventDefault();
-    setChange(false);
-    setValue(evt.target.textContent);
+  onMainButton = () => {
+    this.setState({ change: true });
   };
 
-  return (
-    <div className="App">
-      {change
-        ? <div>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ marginRight: "10px" }}
-              onClick={onChangeButtons}
-            >
-              1
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ marginRight: "10px" }}
-              onClick={onChangeButtons}
-            >
-              2
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onChangeButtons}
-            >
-              3
-            </Button>
-          </div>
-        : <Button variant="contained" color="primary" onClick={onMainButton}>
-            {value}
-          </Button>}
-    </div>
-  );
+  onChangeButtons = num => {
+    this.setState({ value: num, change: false });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        {this.state.change
+          ? <ChangeButtons onChangeButtons={this.onChangeButtons} />
+          : <MainButton
+              value={this.state.value}
+              onMainButton={this.onMainButton}
+            />}
+      </div>
+    );
+  }
 }
